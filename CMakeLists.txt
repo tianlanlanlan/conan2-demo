@@ -8,8 +8,12 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+message(STATUS "CMAKE_MODULE_PATH: ${CMAKE_MODULE_PATH}")
+message(STATUS "CMAKE_PREFIX_PATH: ${CMAKE_PREFIX_PATH}")
+
 find_package(fmt REQUIRED)
 find_package(ZLIB REQUIRED)
+find_package(protobuf REQUIRED)
 
 add_executable(main src/main.cpp)
 target_link_libraries(main PRIVATE fmt::fmt ZLIB::ZLIB)
