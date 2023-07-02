@@ -1,5 +1,6 @@
 #include "fmt/color.h"
 #include "zlib.h"
+#include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -37,6 +38,8 @@ int main() {
 #else
   printf("Debug configuration!\n");
 #endif
+
+  std::cout << "rebuild" << std::endl;
 
   return 0;
 }

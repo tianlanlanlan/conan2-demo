@@ -301,6 +301,7 @@ macro(conan_provide_dependency package_name)
     find_package(${ARGN} BYPASS_PROVIDER CMAKE_FIND_ROOT_PATH_BOTH)
 endmacro()
 
+# require cmake >=3.24
 cmake_language(
     SET_DEPENDENCY_PROVIDER conan_provide_dependency
     SUPPORTED_METHODS FIND_PACKAGE

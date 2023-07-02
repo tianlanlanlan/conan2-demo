@@ -17,10 +17,10 @@ usage() {
   exit 1
 }
 
-[ $# -eq 1 ] && platform=$1 || platform="linux"
+[ ! $# -eq 1 ] && usage || platform=$1
 case $platform in
 linux)
-  host_profile="./profiles/default"
+  host_profile="./profiles/linux"
   ;;
 riscv)
   host_profile="./profiles/riscv"
@@ -30,23 +30,26 @@ arm)
   ;;
 *)
   echo "unkown '$platform', use $platform_options"
-  usage
+  exit 1
   ;;
 esac
 
-# Debug | RelWithDebInfo | MinSizeRel | Release
-build_type="RelWithDebInfo"
 build_dir="build_$platform"
 
 rm -rf $build_dir && mkdir $build_dir
 conan install conanfile.py \
   --output-folder $build_dir \
   --profile $host_profile \
-  --settings build_type=$build_type \
   --options *:shared=True \
   --options *:platform=$platform \
   --build missing \
-  --format json >$build_dir/conan_install_output.json
+  --settings build_type=Release \
+  --settings protobuf/*:build_type=Debug \
+  --settings fmt/*:build_type=Debug \
+  # --format json >$build_dir/conan_install_output.json
+
+# Debug | RelWithDebInfo | MinSizeRel | Release
+build_type="RelWithDebInfo"
 
 # cmake_preset_prefix=$platform
 # cmake_preset_suffix=$(echo $build_type | awk '{print tolower($0)}')
@@ -56,12 +59,14 @@ conan install conanfile.py \
 
 cmake -S . -B $build_dir \
   -DCMAKE_TOOLCHAIN_FILE=$build_dir/conan/conan_toolchain.cmake \
-  -DCMAKE_BUILD_TYPE=$build_type
+  -DCMAKE_BUILD_TYPE=$build_type \
+  # --log-level=VERBOSE
 cmake --build $build_dir
 
 # post process
 case $platform in
 linux)
+  ldd ./$build_dir/bin/main
   ./$build_dir/bin/main
   ;;
 riscv) ;;
