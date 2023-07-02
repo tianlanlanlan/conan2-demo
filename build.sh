@@ -35,22 +35,29 @@ arm)
 esac
 
 # Debug | RelWithDebInfo | MinSizeRel | Release
-build_type="Debug"
-cmake_preset_prefix=$platform
-cmake_preset_suffix=$(echo $build_type | awk '{print tolower($0)}')
-cmake_preset="$cmake_preset_prefix-$cmake_preset_suffix"
+build_type="RelWithDebInfo"
 build_dir="build_$platform"
 
-rm -rf $build_dir
+rm -rf $build_dir && mkdir $build_dir
 conan install conanfile.py \
   --output-folder $build_dir \
   --profile $host_profile \
   --settings build_type=$build_type \
   --options *:shared=True \
   --options *:platform=$platform \
-  --build missing
-cmake --preset $cmake_preset --log-level=VERBOSE
-cmake --build --preset $cmake_preset
+  --build missing \
+  --format json >$build_dir/conan_install_output.json
+
+# cmake_preset_prefix=$platform
+# cmake_preset_suffix=$(echo $build_type | awk '{print tolower($0)}')
+# cmake_preset="$cmake_preset_prefix-$cmake_preset_suffix"
+# cmake --preset $cmake_preset --log-level=VERBOSE
+# cmake --build --preset $cmake_preset
+
+cmake -S . -B $build_dir \
+  -DCMAKE_TOOLCHAIN_FILE=$build_dir/conan/conan_toolchain.cmake \
+  -DCMAKE_BUILD_TYPE=$build_type
+cmake --build $build_dir
 
 # post process
 case $platform in

@@ -13,5 +13,8 @@
     "--pretty",
     "--clang-tidy"
   ],
-  "C_Cpp.intelliSenseEngine": "disabled"
+  "C_Cpp.intelliSenseEngine": "disabled",
+  "cmake.configureArgs": [
+    "-DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=cmake/conan_provider.cmake"
+  ]
 }

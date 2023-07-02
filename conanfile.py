@@ -27,24 +27,24 @@ class Conan2DemoRecipe(ConanFile):
         dep = CMakeDeps(self)
         dep.generate()
 
-        print("------------deps info------------")
-        aggregated_cpp_info = CppInfo(self)
-        deps = self.dependencies.host.topological_sort
-        deps = [dep for dep in reversed(deps.values())]
-        for dep in deps:
-            print(dep)
-            dep_cppinfo = dep.cpp_info.aggregated_components()
-            aggregated_cpp_info.merge(dep_cppinfo)
-            for cname, c in dep_cppinfo.components.items():
-                print(f"name: {cname}")
-        print(f"includedirs:")
-        [print(f"\t{d}") for d in aggregated_cpp_info.includedirs]
-        print(f"libdirs:")
-        [print(f"\t{d}") for d in aggregated_cpp_info.libdirs]
-        print(f"bindirs:")
-        [print(f"\t{d}") for d in aggregated_cpp_info.bindirs]
-        print(f"libs: {aggregated_cpp_info.libs}")
-        print(f"system_libs: {aggregated_cpp_info.system_libs}")
+        # print("------------deps info------------")
+        # aggregated_cpp_info = CppInfo(self)
+        # deps = self.dependencies.host.topological_sort
+        # deps = [dep for dep in reversed(deps.values())]
+        # for dep in deps:
+        #     print(dep)
+        #     dep_cppinfo = dep.cpp_info.aggregated_components()
+        #     aggregated_cpp_info.merge(dep_cppinfo)
+        #     for cname, c in dep_cppinfo.components.items():
+        #         print(f"name: {cname}")
+        # print(f"includedirs:")
+        # [print(f"\t{d}") for d in aggregated_cpp_info.includedirs]
+        # print(f"libdirs:")
+        # [print(f"\t{d}") for d in aggregated_cpp_info.libdirs]
+        # print(f"bindirs:")
+        # [print(f"\t{d}") for d in aggregated_cpp_info.bindirs]
+        # print(f"libs: {aggregated_cpp_info.libs}")
+        # print(f"system_libs: {aggregated_cpp_info.system_libs}")
 
     def build_requirements(self):
         self.tool_requires("cmake/3.24.4")
