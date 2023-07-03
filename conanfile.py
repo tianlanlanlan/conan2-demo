@@ -34,14 +34,7 @@ class Conan2Demo(ConanFile):
         tc.generate()
 
         deps = CMakeDeps(self)
-        deps.configuration = "Release"
         deps.generate()
-        deps.configuration = "Debug"
-        deps.generate()
-        deps.configuration = "RelWithDebInfo"
-        deps.generate()
-        # deps.configuration = "MinSizeRel"
-        # deps.generate()
 
         self.print_dependencies()
         dst_dir = f"{self.build_folder}/bin"
@@ -53,6 +46,7 @@ class Conan2Demo(ConanFile):
             copy(self, "*.so.*", src_dir, dst_dir)
 
     def layout(self):
+        # set all conan generated file to {self.build_folder}/conan
         self.folders.generators = "conan"
 
     def print_dependencies(self):

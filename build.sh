@@ -3,14 +3,20 @@ set -e
 # set -x
 
 platform_options="<linux | riscv | arm>"
-recommand_conan_version="2.0.6"
 
 check_conan() {
   [ -z $(command -v conan) ] && echo "conan not installed" && exit 1
-  if [ ! $(conan --version | grep -o '[0-9.]*') -eq "$conan_version" ]; then
-    pip install conan==$conan_version --upgrade
+  conan_minimum_version="2.0.6"
+  conan_current_version=$(conan --version | grep -o '[0-9.]*')
+  version=$(printf "$conan_minimum_version\n$conan_current_version\n" | sort -V | head -n 1)
+  if [ "$version" != "$conan_minimum_version" ]; then
+    printf "require conan >= $conan_minimum_version, current: $conan_current_version\n"
+    printf "run: 'pip install conan --upgrade'\n"
+    exit 1
   fi
 }
+
+check_conan
 
 usage() {
   printf "usage:\n\t$0 $platform_options\n"
@@ -35,6 +41,8 @@ arm)
 esac
 
 build_dir="build_$platform"
+# Debug | RelWithDebInfo | MinSizeRel | Release
+build_type="RelWithDebInfo"
 
 rm -rf $build_dir && mkdir $build_dir
 conan install conanfile.py \
@@ -46,10 +54,8 @@ conan install conanfile.py \
   --settings build_type=Release \
   --settings protobuf/*:build_type=Debug \
   --settings fmt/*:build_type=Debug \
-  # --format json >$build_dir/conan_install_output.json
-
-# Debug | RelWithDebInfo | MinSizeRel | Release
-build_type="RelWithDebInfo"
+  --settings conan2_demo/*:build_type=$build_type \
+  --format json >$build_dir/conan_install_output.json
 
 # cmake_preset_prefix=$platform
 # cmake_preset_suffix=$(echo $build_type | awk '{print tolower($0)}')
@@ -60,7 +66,7 @@ build_type="RelWithDebInfo"
 cmake -S . -B $build_dir \
   -DCMAKE_TOOLCHAIN_FILE=$build_dir/conan/conan_toolchain.cmake \
   -DCMAKE_BUILD_TYPE=$build_type \
-  # --log-level=VERBOSE
+  --log-level=VERBOSE
 cmake --build $build_dir
 
 # post process
