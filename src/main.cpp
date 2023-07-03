@@ -1,4 +1,6 @@
 #include "fmt/color.h"
+#include "hello.h"
+#include "world.h"
 #include "zlib.h"
 #include <iostream>
 #include <stdio.h>
@@ -40,6 +42,13 @@ int main() {
 #endif
 
   std::cout << "rebuild" << std::endl;
+
+  // test hello package
+  hello();
+  world();
+  std::vector<std::string> vec;
+  vec.push_back("test_package");
+  hello_print_vector(vec);
 
   return 0;
 }

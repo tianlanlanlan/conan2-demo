@@ -44,6 +44,8 @@ build_dir="build_$platform"
 # Debug | RelWithDebInfo | MinSizeRel | Release
 build_type="RelWithDebInfo"
 
+[ -d hello_package ] && conan create hello_package
+
 rm -rf $build_dir && mkdir $build_dir
 conan install conanfile.py \
   --output-folder $build_dir \
@@ -54,6 +56,7 @@ conan install conanfile.py \
   --settings build_type=Release \
   --settings protobuf/*:build_type=Debug \
   --settings fmt/*:build_type=Debug \
+  --settings hello_package/*:build_type=Debug \
   --settings conan2_demo/*:build_type=$build_type \
   --format json >$build_dir/conan_install_output.json
 
@@ -72,6 +75,7 @@ cmake --build $build_dir
 # post process
 case $platform in
 linux)
+  conan list hello_package/*:*
   ldd ./$build_dir/bin/main
   ./$build_dir/bin/main
   ;;

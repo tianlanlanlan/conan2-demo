@@ -25,6 +25,7 @@ class Conan2Demo(ConanFile):
         self.requires("fmt/9.1.0")
         self.requires("protobuf/3.21.9")
         self.requires("nlohmann_json/3.11.2")
+        self.requires("hello_package/0.1.0")
 
     def generate(self):
         tc = CMakeToolchain(self)
@@ -41,9 +42,9 @@ class Conan2Demo(ConanFile):
         for dep in self.dependencies.values():
             try:
                 src_dir = dep.cpp_info.libdirs[0]
+                copy(self, "*.so.*", src_dir, dst_dir)
             except:
                 continue
-            copy(self, "*.so.*", src_dir, dst_dir)
 
     def layout(self):
         # set all conan generated file to {self.build_folder}/conan
