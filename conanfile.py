@@ -42,7 +42,7 @@ class Conan2Demo(ConanFile):
         for dep in self.dependencies.values():
             try:
                 src_dir = dep.cpp_info.libdirs[0]
-                copy(self, "*.so.*", src_dir, dst_dir)
+                copy(self, "*.so*", src_dir, dst_dir)
             except:
                 continue
 
