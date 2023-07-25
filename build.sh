@@ -41,12 +41,13 @@ arm)
 esac
 
 build_dir="build_$platform"
+install_dir="output"
 # Debug | RelWithDebInfo | MinSizeRel | Release
 build_type="RelWithDebInfo"
 
-[ -d hello_package ] && conan create hello_package
+[ -d hello_package ] && conan create hello_package --test-folder "test_package"
 
-rm -rf $build_dir && mkdir $build_dir
+rm -rf $build_dir $install_dir && mkdir $build_dir
 conan install conanfile.py \
   --output-folder $build_dir \
   --profile $host_profile \
@@ -69,13 +70,14 @@ conan install conanfile.py \
 cmake -S . -B $build_dir \
   -DCMAKE_TOOLCHAIN_FILE=$build_dir/conan/conan_toolchain.cmake \
   -DCMAKE_BUILD_TYPE=$build_type \
+  -DCMAKE_INSTALL_PREFIX=$install_dir \
   --log-level=VERBOSE
 cmake --build $build_dir
 
-# post process
+# test exe
 case $platform in
 linux)
-  conan list hello_package/*:*
+  # conan list hello_package/*:*
   ldd ./$build_dir/bin/main
   ./$build_dir/bin/main
   ;;
@@ -83,3 +85,6 @@ riscv) ;;
 arm) ;;
 *) ;;
 esac
+
+# install
+cmake --install $build_dir

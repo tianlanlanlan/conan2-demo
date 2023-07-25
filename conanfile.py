@@ -35,6 +35,15 @@ class Conan2Demo(ConanFile):
         tc.generate()
 
         deps = CMakeDeps(self)
+        # for require, dep in self.dependencies.items():
+        #     self.output.info(f"{dep.ref.name}")
+        #     property = deps.get_property("cmake_target_name", dep)
+        #     self.output.info(f"cmake_target_name: {property}")
+        #     if str(dep.ref.name) == "hello_package":
+        #         dep.cpp_info.components["hello"].libs = ["hellod"]
+        #         dep.cpp_info.components["world"].libs = ["worldd"]
+        #         libs = dep.cpp_info.components["world"].libs
+        #         self.output.info(f"after: {libs}")
         deps.generate()
 
         self.print_dependencies()

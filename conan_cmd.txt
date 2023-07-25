@@ -2,3 +2,6 @@ conan list add/*:*
 
 # create a project
 conan new cmake_lib -d name=hello -d version=1.0
+
+# remove cache
+conan remove -c "*"
