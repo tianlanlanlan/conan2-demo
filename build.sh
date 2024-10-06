@@ -75,6 +75,7 @@ build() {
     -DCMAKE_TOOLCHAIN_FILE=$build_dir/conan/conan_toolchain.cmake \
     -DCMAKE_BUILD_TYPE=$build_type \
     -DCMAKE_INSTALL_PREFIX=$install_dir \
+    -DUNIT_TEST=oFF \
     --log-level=VERBOSE
   cmake --build $build_dir
   cmake --install $build_dir

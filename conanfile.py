@@ -26,6 +26,7 @@ class Conan2Demo(ConanFile):
         self.requires("protobuf/3.21.9")
         self.requires("nlohmann_json/3.11.2")
         self.requires("hello_package/0.1.0")
+        self.requires("gtest/1.15.0")
 
     def generate(self):
         tc = CMakeToolchain(self)

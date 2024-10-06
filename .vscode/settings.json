@@ -1,7 +1,7 @@
 {
   "clangd.arguments": [
     "--background-index",
-    "--compile-commands-dir=${workspaceFolder}/build_linux",
+    "--compile-commands-dir=${workspaceFolder}/build",
     "-j=12",
     "--all-scopes-completion",
     "--completion-style=detailed",
